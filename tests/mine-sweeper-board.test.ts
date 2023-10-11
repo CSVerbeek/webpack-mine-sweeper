@@ -84,6 +84,19 @@ describe('Mine sweeper board', () => {
             }
         }
     });
+
+    test('can listen to detonation', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
+        const testFn = jest.fn();
+        board.isDetonated$.subscribe({
+            next: isDetonated => {
+                testFn(isDetonated)
+            }
+        });
+        expect(testFn).not.toBeCalledWith(true);
+        board.cellGrid.flat().find(cell => cell.isBomb).open();
+        expect(testFn).toBeCalledWith(true);
+    });
 });
 
 function getAdjacentCellsFromBoard(board: MineSweeperBoard, coordinates: {row: number, col: number}): Cell[] {

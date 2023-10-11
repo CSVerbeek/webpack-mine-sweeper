@@ -1,8 +1,11 @@
+import { BehaviorSubject, Observable, distinctUntilChanged } from "rxjs";
 import { Cell } from "./cell";
 
 export class MineSweeperBoard {
     readonly cellGrid: CellGrid;
     private _isDetonated = false;
+    private readonly _isDetonated$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    readonly isDetonated$: Observable<boolean> = this._isDetonated$.pipe(distinctUntilChanged());
     private _isCompleted = false;
 
     constructor(boardSettings: BoardSettings) {
@@ -12,6 +15,12 @@ export class MineSweeperBoard {
 
     get isDetonated(): boolean {
         return this._isDetonated;
+    }
+
+    // undetonating is not possible, can only be set to true
+    private set isDetonated(_isDetonated: true) {
+        this._isDetonated = true;
+        this._isDetonated$.next(true);
     }
 
     get isCompleted(): boolean {
@@ -59,7 +68,7 @@ export class MineSweeperBoard {
             cell.isOpen$.subscribe({
                 next: isOpen => {
                     if (isOpen) {
-                        this._isDetonated = true;
+                        this.isDetonated = true;
                         this.openAllBombs();
                     }
                 }
