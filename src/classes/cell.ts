@@ -18,4 +18,8 @@ export class Cell {
     open(): void {
         this._isOpen = true;
     }
+
+    flag(): void {
+        this._isFlagged = true;
+    }
 }

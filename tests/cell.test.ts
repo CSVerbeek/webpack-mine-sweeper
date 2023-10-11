@@ -23,4 +23,10 @@ describe('Mine sweeper cell', () => {
         const cell = new Cell(false);
         expect(cell.isFlagged).toBe(false);
     });
+
+    test('can be flagged', () => {
+        const cell = new Cell(false);
+        cell.flag();
+        expect(cell.isFlagged).toBe(true);
+    });
 });
