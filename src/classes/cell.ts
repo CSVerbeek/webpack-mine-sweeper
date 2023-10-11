@@ -22,4 +22,8 @@ export class Cell {
     flag(): void {
         this._isFlagged = true;
     }
+
+    unFlag(): void {
+        this._isFlagged = false;
+    }
 }
