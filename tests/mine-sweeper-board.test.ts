@@ -54,4 +54,18 @@ describe('Mine sweeper board', () => {
         }
         expect(board.isCompleted).toBe(true);
     });
+
+    test('opens all not flagged other bomb cells when a bomb cell is opened', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
+        const cells = board.cellGrid.flat();
+        const flaggedBomb = cells.find(cell => cell.isBomb);
+        console.log(flaggedBomb.isFlagged, flaggedBomb.isOpen);
+        flaggedBomb.toggleFlag();
+        console.log(flaggedBomb.isFlagged, flaggedBomb.isOpen);
+        const bombCell = cells.find(cell => !cell.isFlagged && cell.isBomb);
+        bombCell.open();
+        expect(cells.filter(cell => !cell.isFlagged && cell.isBomb).every(cell => cell.isOpen)).toBe(true);
+        console.log(flaggedBomb.isFlagged, flaggedBomb.isOpen);
+        expect(flaggedBomb.isOpen).toBe(false);
+    });
 });

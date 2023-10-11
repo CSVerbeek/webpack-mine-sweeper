@@ -54,7 +54,10 @@ export class MineSweeperBoard {
         bombs.forEach(cell => {
             cell.isOpen$.subscribe({
                 next: isOpen => {
-                    this._isDetonated = isOpen;
+                    if (isOpen) {
+                        this._isDetonated = true;
+                        this.openAllBombs();
+                    }
                 }
             });
         });
@@ -65,8 +68,14 @@ export class MineSweeperBoard {
         });
     }
 
-    private updateIsCompleted() {
+    private updateIsCompleted(): void {
         this._isCompleted = this.cellGrid.flat().filter(cell => !cell.isBomb).every(cell => cell.isOpen);
+    }
+
+    private openAllBombs(): void {
+        this.cellGrid.flat().filter(cell => cell.isBomb).forEach(bomb => {
+            bomb.open();
+        });
     }
 }
 
