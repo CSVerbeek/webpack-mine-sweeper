@@ -26,6 +26,9 @@ export class Cell {
             return;
         }
         this._isOpen = true;
+        if(this.isBomb) {
+            return;
+        }
         this.adjacentCells.forEach(cell => { cell.open(); });
     }
 

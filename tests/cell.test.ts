@@ -84,4 +84,16 @@ describe('Mine sweeper cell', () => {
         expect(cellWithNoAdjacentBombs.isOpen).toBe(true);
         expect(cellWithNoAdjacentBombs.adjacentCells.every(cell => cell.isOpen)).toBe(true);
     });
+
+    test('does not open adjacent cells when cell without adjacent bombs is a bomb', () => {
+        const bombWithNoAdjacentBombs = ((): Cell => {
+            const result: Cell = new Cell(true);
+            result.adjacentCells = [new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false)];
+            return result;
+        })();
+        expect(bombWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
+        bombWithNoAdjacentBombs.open();
+        expect(bombWithNoAdjacentBombs.isOpen).toBe(true);
+        expect(bombWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
+    });
 });
