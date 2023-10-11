@@ -2,9 +2,15 @@ import { Cell } from "./cell";
 
 export class MineSweeperBoard {
     readonly cellGrid: CellGrid;
+    private _isDetonated = false;
 
     constructor(boardSettings: BoardSettings) {
         this.cellGrid = this.createCellGrid(boardSettings);
+        this.addListenersForDetonation();
+    }
+
+    get isDetonated(): boolean {
+        return this._isDetonated;
     }
 
     private createCellGrid(boardSettings: BoardSettings): CellGrid {
@@ -34,6 +40,16 @@ export class MineSweeperBoard {
             currentIndex--;
         }
         return cells;
+    }
+
+    private addListenersForDetonation(): void {
+        this.cellGrid.flat().filter(cell => cell.isBomb).forEach(cell => {
+            cell.isOpen$.subscribe({
+                next: isOpen => {
+                    this._isDetonated = isOpen;
+                }
+            });
+        });
     }
 }
 

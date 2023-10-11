@@ -39,4 +39,10 @@ describe('Mine sweeper board', () => {
             expect(count).toBeLessThanOrEqual(expectedCount + allowedDeviation);
         });
     });
+
+    test('detonated on opening a cell with a bomb', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
+        board.cellGrid.flat().find(cell => cell.isBomb).open();
+        expect(board.isDetonated).toBe(true);
+    });
 });
