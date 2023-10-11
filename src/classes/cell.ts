@@ -23,6 +23,9 @@ export class Cell {
     }
 
     toggleFlag(): void {
+        if(this.isOpen) {
+            return;
+        }
         this._isFlagged = !this.isFlagged;
     }
 }

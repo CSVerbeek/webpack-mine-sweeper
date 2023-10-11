@@ -43,4 +43,11 @@ describe('Mine sweeper cell', () => {
         cell.open();
         expect(cell.isOpen).toBe(false);
     });
+
+    test('cannot flag an open cell', () => {
+        const cell = new Cell(false);
+        cell.open();
+        cell.toggleFlag();
+        expect(cell.isFlagged).toBe(false);
+    });
 });
