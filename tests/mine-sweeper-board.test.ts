@@ -45,4 +45,13 @@ describe('Mine sweeper board', () => {
         board.cellGrid.flat().find(cell => cell.isBomb).open();
         expect(board.isDetonated).toBe(true);
     });
+
+    test('is complete on opening all non bomb cells', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
+        let closedNonBomb: Cell;
+        while (closedNonBomb = board.cellGrid.flat().find(cell => !cell.isOpen && !cell.isBomb)) {
+            closedNonBomb.open();
+        }
+        expect(board.isCompleted).toBe(true);
+    });
 });
