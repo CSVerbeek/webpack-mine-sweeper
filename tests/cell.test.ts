@@ -58,4 +58,18 @@ describe('Mine sweeper cell', () => {
         expect(cell.adjacentCells.length).toBe(adjacentCells.length);
         expect(cell.adjacentCells.every(cell => adjacentCells.includes(cell))).toBe(true);
     });
+
+    test('can get number of adjacent bombs', () => {
+        const cell = new Cell(false);
+        const adjacentCellsSet: Cell[][] = [
+            [new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false)],
+            [new Cell(false), new Cell(false), new Cell(true), new Cell(false), new Cell(false), new Cell(true), new Cell(false), new Cell(false)],
+            [new Cell(false), new Cell(true), new Cell(false), new Cell(true), new Cell(false), new Cell(true), new Cell(false), new Cell(false)],
+            [new Cell(true), new Cell(true), new Cell(true), new Cell(true), new Cell(true), new Cell(true), new Cell(true), new Cell(true)]
+        ];
+        adjacentCellsSet.forEach(adjacentCells => {
+            cell.adjacentCells = adjacentCells;
+            expect(cell.numberOfAdjacentBombs).toBe(adjacentCells.filter(cell => cell.isBomb).length);
+        });
+    });
 });

@@ -16,6 +16,10 @@ export class Cell {
         return this._isFlagged;
     }
 
+    get numberOfAdjacentBombs(): number {
+        return this.adjacentCells.filter(cell => cell.isBomb).length;
+    }
+
     open(): void {
         if(this.isFlagged) {
             return;
