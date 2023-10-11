@@ -19,11 +19,7 @@ export class Cell {
         this._isOpen = true;
     }
 
-    flag(): void {
-        this._isFlagged = true;
-    }
-
-    unFlag(): void {
-        this._isFlagged = false;
+    toggleFlag(): void {
+        this._isFlagged = !this.isFlagged;
     }
 }

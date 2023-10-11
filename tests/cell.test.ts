@@ -26,14 +26,14 @@ describe('Mine sweeper cell', () => {
 
     test('can be flagged', () => {
         const cell = new Cell(false);
-        cell.flag();
+        cell.toggleFlag();
         expect(cell.isFlagged).toBe(true);
     });
 
     test('can be unflagged', () => {
         const cell = new Cell(false);
-        cell.flag();
-        cell.unFlag();
+        cell.toggleFlag();
+        cell.toggleFlag();
         expect(cell.isFlagged).toBe(false);
     });
 });
