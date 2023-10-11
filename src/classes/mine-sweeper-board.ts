@@ -22,7 +22,7 @@ export class MineSweeperBoard {
         const bombs = Array(boardSettings.nrOfBombs).fill(null).map(() => new Cell(true));
         const emptyCells = Array(boardSettings.cols * boardSettings.rows - boardSettings.nrOfBombs).fill(null).map(() => new Cell(false));
         const cells = this.shuffleCells([...bombs, ...emptyCells]);
-        const result = [];
+        const result: CellGrid = [];
 
         for (let rowIndex = 0; rowIndex < boardSettings.rows; rowIndex++) {
             const row = [];
@@ -31,6 +31,10 @@ export class MineSweeperBoard {
             }
             result.push(row);
         }
+
+        result.flat().forEach(cell => {
+            cell.adjacentCells = this.getAdjacentCells(result, cell);
+        });
 
         return result;
     }
@@ -76,6 +80,28 @@ export class MineSweeperBoard {
         this.cellGrid.flat().filter(cell => cell.isBomb).forEach(bomb => {
             bomb.open();
         });
+    }
+
+    private getAdjacentCells(grid: CellGrid, cell: Cell): Cell[] {
+        const row = grid.find(cellRow => cellRow.includes(cell));
+        const rowIndex = grid.indexOf(row);
+        const colIndex = row.indexOf(cell);
+
+        const result = [];
+        for(let adjacentRowIndex = rowIndex - 1; adjacentRowIndex <= rowIndex + 1; adjacentRowIndex++) {
+            const cellRow = grid[adjacentRowIndex];
+            if(!cellRow) {
+                continue;
+            }
+            for(let adjacentColIndex = colIndex - 1; adjacentColIndex <= colIndex + 1; adjacentColIndex++) {
+                const adjacentCell = cellRow[adjacentColIndex];
+                if(!adjacentCell || adjacentCell === cell) {
+                    continue;
+                }
+                result.push(adjacentCell);
+            }
+        }
+        return result;
     }
 }
 

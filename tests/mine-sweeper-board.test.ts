@@ -64,13 +64,41 @@ describe('Mine sweeper board', () => {
         const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
         const cells = board.cellGrid.flat();
         const flaggedBomb = cells.find(cell => cell.isBomb);
-        console.log(flaggedBomb.isFlagged, flaggedBomb.isOpen);
         flaggedBomb.toggleFlag();
-        console.log(flaggedBomb.isFlagged, flaggedBomb.isOpen);
         const bombCell = cells.find(cell => !cell.isFlagged && cell.isBomb);
         bombCell.open();
         expect(cells.filter(cell => !cell.isFlagged && cell.isBomb).every(cell => cell.isOpen)).toBe(true);
-        console.log(flaggedBomb.isFlagged, flaggedBomb.isOpen);
         expect(flaggedBomb.isOpen).toBe(false);
     });
+
+    test('has correct adjacent cells for each cell', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
+        for(let row = 0; row < board.cellGrid.length; row++) {
+            const cellRow = board.cellGrid[row];
+            for(let col = 0; col < cellRow.length; col++) {
+                const cell = cellRow[col];
+                const adjacentCellsFromBoard = getAdjacentCellsFromBoard(board, {row, col});
+                expect(cell.adjacentCells.length).toEqual(adjacentCellsFromBoard.length);
+                expect(cell.adjacentCells.every((cell, index) => cell.adjacentCells.indexOf(cell) === index));
+                expect(cell.adjacentCells.every(cell => adjacentCellsFromBoard.includes(cell)));
+            }
+        }
+    });
 });
+
+function getAdjacentCellsFromBoard(board: MineSweeperBoard, coordinates: {row: number, col: number}): Cell[] {
+    const grid = board.cellGrid;
+    const result: Cell[] = [];
+    for (let row = coordinates.row - 1; row <= coordinates.row + 1; row++) {
+        const gridRow = grid[row];
+        if (!gridRow) {
+            continue;
+        }
+        for (let col = coordinates.col - 1; col <= coordinates.col + 1; col++) {
+            if (gridRow[col] && (row !== coordinates.row || col !== coordinates.col)) {
+                result.push(gridRow[col]);
+            }
+        }
+    }
+    return result;
+}
