@@ -21,4 +21,22 @@ describe('Mine sweeper board', () => {
         const firstFoundDuplicateCell = cells.find((cell, index) => cells.indexOf(cell) !== index);
         expect(firstFoundDuplicateCell).toBeUndefined();
     });
+
+    test('has the bombs placed randomly', () => {
+        const nrOfBoards = 500;
+        const boardSettings = { rows: 10, cols: 10, nrOfBombs: 20 };
+        const nrOfCells = boardSettings.rows * boardSettings.cols;
+        const boards = new Array(nrOfBoards).fill(null)
+            .map(_ => new MineSweeperBoard(boardSettings));
+        const bombAtIndexCounts: number[] = boards
+            .map(board => board.cellGrid.flat().map(cell => cell.isBomb ? 1 : 0))
+            .reduce((prev: number[], curr: number[]) => prev.map((prevCount, index) => prevCount + curr[index]), new Array(nrOfCells).fill(0));
+        const chanceOfCellBeingBomb = boardSettings.nrOfBombs / (nrOfCells);
+        const expectedCount = chanceOfCellBeingBomb * nrOfBoards;
+        const allowedDeviation = 0.06 * nrOfBoards;
+        bombAtIndexCounts.forEach(count => {
+            expect(count).toBeGreaterThanOrEqual(expectedCount - allowedDeviation);
+            expect(count).toBeLessThanOrEqual(expectedCount + allowedDeviation);
+        });
+    });
 });

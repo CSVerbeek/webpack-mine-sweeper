@@ -10,7 +10,7 @@ export class MineSweeperBoard {
     private createCellGrid(boardSettings: BoardSettings): CellGrid {
         const bombs = Array(boardSettings.nrOfBombs).fill(null).map(() => new Cell(true));
         const emptyCells = Array(boardSettings.cols * boardSettings.rows - boardSettings.nrOfBombs).fill(null).map(() => new Cell(false));
-        const cells = [...bombs, ...emptyCells];
+        const cells = this.shuffleCells([...bombs, ...emptyCells]);
         const result = [];
 
         for (let rowIndex = 0; rowIndex < boardSettings.rows; rowIndex++) {
@@ -22,6 +22,18 @@ export class MineSweeperBoard {
         }
 
         return result;
+    }
+
+    private shuffleCells(cells: Cell[]): Cell[] {
+        let currentIndex = cells.length - 1;
+        while (currentIndex > 0) {
+            const randomCellIndex = Math.floor(Math.random() * (currentIndex + 1));
+            if (randomCellIndex !== currentIndex) {
+                [cells[currentIndex], cells[randomCellIndex]] = [cells[randomCellIndex], cells[currentIndex]];
+            }
+            currentIndex--;
+        }
+        return cells;
     }
 }
 
