@@ -12,4 +12,10 @@ describe('Mine sweeper cell', () => {
     test('has a closed state after creation', () => {
         expect(new Cell(false).isOpen).toEqual(false);
     });
+
+    test('can be opened', () => {
+        const cell = new Cell(false);
+        cell.open();
+        expect(cell.isOpen).toEqual(true);
+    });
 });

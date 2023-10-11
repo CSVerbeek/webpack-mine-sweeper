@@ -9,4 +9,8 @@ export class Cell {
     get isOpen(): boolean {
         return this._isOpen;
     }
+
+    open(): void {
+        this._isOpen = true;
+    }
 }
