@@ -30,6 +30,10 @@ export class Cell {
         return this.adjacentCells.filter(cell => cell.isBomb).length;
     }
 
+    get isWronglyFlagged(): boolean {
+        return !this.isBomb && this.isFlagged;
+    }
+
     open(): void {
         if(this.isOpen || this.isFlagged) {
             // Don't open when flagged. Also do not continue when already open to prevent infinite loops when opening adjacent cells

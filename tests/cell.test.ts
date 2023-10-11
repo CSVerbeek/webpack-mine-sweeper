@@ -124,6 +124,12 @@ describe('Mine sweeper cell', () => {
         expect(adjacentCells.filter(cell => !cell.isFlagged).every(cell => cell.isOpen)).toBe(true);
         expect(adjacentCells.filter(cell => cell.isFlagged).every(cell => cell.isOpen)).toBe(false);
     });
+
+    test('can be a wrongly marked cell', () => {
+        const cell = new Cell(false);
+        cell.toggleFlag();
+        expect(cell.isWronglyFlagged).toBe(true);
+    });
 });
 
 function createCellWithNoAdjacentBombs(isBomb: boolean): Cell {
