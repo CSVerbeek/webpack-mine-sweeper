@@ -16,6 +16,9 @@ export class Cell {
     }
 
     open(): void {
+        if(this.isFlagged) {
+            return;
+        }
         this._isOpen = true;
     }
 
