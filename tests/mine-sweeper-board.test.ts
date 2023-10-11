@@ -23,7 +23,7 @@ describe('Mine sweeper board', () => {
     });
 
     test('has the bombs placed randomly', () => {
-        const nrOfBoards = 500;
+        const nrOfBoards = 1000;
         const boardSettings = { rows: 10, cols: 10, nrOfBombs: 20 };
         const nrOfCells = boardSettings.rows * boardSettings.cols;
         const boards = new Array(nrOfBoards).fill(null)
