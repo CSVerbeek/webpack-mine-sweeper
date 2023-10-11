@@ -8,4 +8,8 @@ describe('Mine sweeper cell', () => {
     test('can be created with a bomb', () => {
         expect(new Cell(true).isBomb).toEqual(true);
     });
+
+    test('has a closed state after creation', () => {
+        expect(new Cell(false).isOpen).toEqual(false);
+    });
 });
