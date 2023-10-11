@@ -1,6 +1,7 @@
 export class Cell {
-    readonly isBomb = false;
+    readonly isBomb: boolean;
 
-    constructor() {
+    constructor(isBomb: boolean) {
+        this.isBomb = isBomb;
     }
 }
