@@ -43,7 +43,9 @@ export class Cell {
         if(this.isBomb) {
             return;
         }
-        this.adjacentCells.forEach(cell => { cell.open(); });
+        if(this.numberOfAdjacentBombs === 0) {
+            this.adjacentCells.forEach(cell => { cell.open(); });
+        }
     }
 
     toggleFlag(): void {
