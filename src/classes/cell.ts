@@ -2,7 +2,7 @@ export class Cell {
     readonly isBomb: boolean;
     private _isOpen = false;
     private _isFlagged = false;
-    adjacentCells: Cell[];
+    adjacentCells: Cell[] = [];
 
     constructor(isBomb: boolean) {
         this.isBomb = isBomb;
@@ -21,10 +21,12 @@ export class Cell {
     }
 
     open(): void {
-        if(this.isFlagged) {
+        if(this.isOpen || this.isFlagged) {
+            // Don't open when flagged. Also do not continue when already open to prevent infinite loops when opening adjacent cells
             return;
         }
         this._isOpen = true;
+        this.adjacentCells.forEach(cell => { cell.open(); });
     }
 
     toggleFlag(): void {

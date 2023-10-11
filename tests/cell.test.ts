@@ -72,4 +72,16 @@ describe('Mine sweeper cell', () => {
             expect(cell.numberOfAdjacentBombs).toBe(adjacentCells.filter(cell => cell.isBomb).length);
         });
     });
+
+    test('opens adjacent cells when there are no adjacent bombs', () => {
+        const cellWithNoAdjacentBombs = ((): Cell => {
+            const result: Cell = new Cell(false);
+            result.adjacentCells = [new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false)];
+            return result;
+        })();
+        expect(cellWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
+        cellWithNoAdjacentBombs.open();
+        expect(cellWithNoAdjacentBombs.isOpen).toBe(true);
+        expect(cellWithNoAdjacentBombs.adjacentCells.every(cell => cell.isOpen)).toBe(true);
+    });
 });
