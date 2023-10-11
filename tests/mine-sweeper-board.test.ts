@@ -13,4 +13,12 @@ describe('Mine sweeper board', () => {
         expect(cells.length).toBe(boardSettings.rows * boardSettings.cols);
         expect(cells.filter(cell => cell.isBomb).length).toBe(boardSettings.nrOfBombs);
     });
+
+    test('contains a cell grid with unique cells', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 10 });
+        const cells: Cell[] = board.cellGrid.flat();
+
+        const firstFoundDuplicateCell = cells.find((cell, index) => cells.indexOf(cell) !== index);
+        expect(firstFoundDuplicateCell).toBeUndefined();
+    });
 });
