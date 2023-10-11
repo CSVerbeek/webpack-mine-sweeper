@@ -40,6 +40,11 @@ describe('Mine sweeper board', () => {
         });
     });
 
+    test('is not detonated on creation', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
+        expect(board.isDetonated).toBe(false);
+    });
+
     test('detonated on opening a cell with a bomb', () => {
         const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
         board.cellGrid.flat().find(cell => cell.isBomb).open();
