@@ -74,11 +74,7 @@ describe('Mine sweeper cell', () => {
     });
 
     test('opens adjacent cells when there are no adjacent bombs', () => {
-        const cellWithNoAdjacentBombs = ((): Cell => {
-            const result: Cell = new Cell(false);
-            result.adjacentCells = [new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false)];
-            return result;
-        })();
+        const cellWithNoAdjacentBombs = createCellWithNoAdjacentBombs(false);
         expect(cellWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
         cellWithNoAdjacentBombs.open();
         expect(cellWithNoAdjacentBombs.isOpen).toBe(true);
@@ -86,14 +82,31 @@ describe('Mine sweeper cell', () => {
     });
 
     test('does not open adjacent cells when cell without adjacent bombs is a bomb', () => {
-        const bombWithNoAdjacentBombs = ((): Cell => {
-            const result: Cell = new Cell(true);
-            result.adjacentCells = [new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false)];
-            return result;
-        })();
+        const bombWithNoAdjacentBombs = createCellWithNoAdjacentBombs(true);
         expect(bombWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
         bombWithNoAdjacentBombs.open();
         expect(bombWithNoAdjacentBombs.isOpen).toBe(true);
         expect(bombWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
     });
+
+    test('chains opening the cells without adjacent bombs', () => {
+        const adjacentCellWithNoAdjacentBombs = createCellWithNoAdjacentBombs(false);
+        const cellWithNoAdjacentBombs = ((): Cell => {
+            const result: Cell = new Cell(false);
+            result.adjacentCells = [adjacentCellWithNoAdjacentBombs, new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false)];
+            return result;
+        })();
+        expect(cellWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
+        expect(adjacentCellWithNoAdjacentBombs.adjacentCells.some(cell => cell.isOpen)).toBe(false);
+        cellWithNoAdjacentBombs.open();
+        expect(cellWithNoAdjacentBombs.isOpen).toBe(true);
+        expect(cellWithNoAdjacentBombs.adjacentCells.every(cell => cell.isOpen)).toBe(true);
+        expect(adjacentCellWithNoAdjacentBombs.adjacentCells.every(cell => cell.isOpen)).toBe(true);
+    });
 });
+
+function createCellWithNoAdjacentBombs(isBomb: boolean): Cell {
+    const result: Cell = new Cell(isBomb);
+    result.adjacentCells = [new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false), new Cell(false)];
+    return result;
+}
