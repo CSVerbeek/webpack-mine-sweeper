@@ -18,4 +18,9 @@ describe('Mine sweeper cell', () => {
         cell.open();
         expect(cell.isOpen).toEqual(true);
     });
+
+    test('is not flagged after creation', () => {
+        const cell = new Cell(false);
+        expect(cell.isFlagged).toBe(false);
+    });
 });
