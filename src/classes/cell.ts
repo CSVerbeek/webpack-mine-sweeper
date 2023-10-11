@@ -48,4 +48,13 @@ export class Cell {
         }
         this._isFlagged = !this.isFlagged;
     }
+
+    openAdjacentCells(): void {
+        const nrOfAdjacentFlaggedCells = this.adjacentCells.filter(cell => cell.isFlagged).length;
+        if(this.numberOfAdjacentBombs === nrOfAdjacentFlaggedCells) {
+            this.adjacentCells.forEach(cell => {
+                cell.open();
+            });
+        }
+    }
 }

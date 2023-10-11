@@ -114,6 +114,16 @@ describe('Mine sweeper cell', () => {
         cell.open();
         expect(testFn).toBeCalledWith(true);
     });
+
+    test('can open non flagged adjacent cells when number of adjacent flags matches number of adjacent bombs', () => {
+        const cell = new Cell(false);
+        const adjacentCells = [new Cell(false), new Cell(true), new Cell(false), new Cell(true), new Cell(false), new Cell(false), new Cell(true), new Cell(false)];
+        cell.adjacentCells = adjacentCells;
+        adjacentCells.filter(cell => cell.isBomb).forEach(cell => { cell.toggleFlag(); });
+        cell.openAdjacentCells();
+        expect(adjacentCells.filter(cell => !cell.isFlagged).every(cell => cell.isOpen)).toBe(true);
+        expect(adjacentCells.filter(cell => cell.isFlagged).every(cell => cell.isOpen)).toBe(false);
+    });
 });
 
 function createCellWithNoAdjacentBombs(isBomb: boolean): Cell {
