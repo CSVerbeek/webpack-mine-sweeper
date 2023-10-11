@@ -103,6 +103,17 @@ describe('Mine sweeper cell', () => {
         expect(cellWithNoAdjacentBombs.adjacentCells.every(cell => cell.isOpen)).toBe(true);
         expect(adjacentCellWithNoAdjacentBombs.adjacentCells.every(cell => cell.isOpen)).toBe(true);
     });
+
+    test('can listen to open changed', () => {
+        const cell = new Cell(false);
+        const testFn = jest.fn();
+        cell.isOpen$.subscribe({next: isOpen => {
+            testFn(isOpen);
+        }});
+        expect(testFn).not.toBeCalledWith(true);
+        cell.open();
+        expect(testFn).toBeCalledWith(true);
+    });
 });
 
 function createCellWithNoAdjacentBombs(isBomb: boolean): Cell {
