@@ -2,6 +2,7 @@ export class Cell {
     readonly isBomb: boolean;
     private _isOpen = false;
     private _isFlagged = false;
+    adjacentCells: Cell[];
 
     constructor(isBomb: boolean) {
         this.isBomb = isBomb;

@@ -50,4 +50,12 @@ describe('Mine sweeper cell', () => {
         cell.toggleFlag();
         expect(cell.isFlagged).toBe(false);
     });
+
+    test('can set adjacent cells', () => {
+        const cell = new Cell(false);
+        const adjacentCells: Cell[] = [new Cell(false), new Cell(false), new Cell(false)];
+        cell.adjacentCells = adjacentCells;
+        expect(cell.adjacentCells.length).toBe(adjacentCells.length);
+        expect(cell.adjacentCells.every(cell => adjacentCells.includes(cell))).toBe(true);
+    });
 });
