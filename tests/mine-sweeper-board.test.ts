@@ -53,10 +53,7 @@ describe('Mine sweeper board', () => {
 
     test('is complete on opening all non bomb cells', () => {
         const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
-        let closedNonBomb: Cell;
-        while (closedNonBomb = board.cellGrid.flat().find(cell => !cell.isOpen && !cell.isBomb)) {
-            closedNonBomb.open();
-        }
+        board.cellGrid.flat().filter(cell => !cell.isBomb).forEach(cell => { cell.open(); });
         expect(board.isCompleted).toBe(true);
     });
 
@@ -73,11 +70,11 @@ describe('Mine sweeper board', () => {
 
     test('has correct adjacent cells for each cell', () => {
         const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
-        for(let row = 0; row < board.cellGrid.length; row++) {
+        for (let row = 0; row < board.cellGrid.length; row++) {
             const cellRow = board.cellGrid[row];
-            for(let col = 0; col < cellRow.length; col++) {
+            for (let col = 0; col < cellRow.length; col++) {
                 const cell = cellRow[col];
-                const adjacentCellsFromBoard = getAdjacentCellsFromBoard(board, {row, col});
+                const adjacentCellsFromBoard = getAdjacentCellsFromBoard(board, { row, col });
                 expect(cell.adjacentCells.length).toEqual(adjacentCellsFromBoard.length);
                 expect(cell.adjacentCells.every((cell, index) => cell.adjacentCells.indexOf(cell) === index));
                 expect(cell.adjacentCells.every(cell => adjacentCellsFromBoard.includes(cell)));
@@ -97,9 +94,22 @@ describe('Mine sweeper board', () => {
         board.cellGrid.flat().find(cell => cell.isBomb).open();
         expect(testFn).toBeCalledWith(true);
     });
+
+    test('can listen to completion', () => {
+        const board = new MineSweeperBoard({ rows: 10, cols: 10, nrOfBombs: 20 });
+        const testFn = jest.fn();
+        board.isCompleted$.subscribe({
+            next: isCompleted => {
+                testFn(isCompleted);
+            }
+        });
+        expect(testFn).not.toBeCalledWith(true);
+        board.cellGrid.flat().filter(cell => !cell.isBomb).forEach(cell => { cell.open(); });
+        expect(testFn).toBeCalledWith(true);
+    });
 });
 
-function getAdjacentCellsFromBoard(board: MineSweeperBoard, coordinates: {row: number, col: number}): Cell[] {
+function getAdjacentCellsFromBoard(board: MineSweeperBoard, coordinates: { row: number, col: number }): Cell[] {
     const grid = board.cellGrid;
     const result: Cell[] = [];
     for (let row = coordinates.row - 1; row <= coordinates.row + 1; row++) {

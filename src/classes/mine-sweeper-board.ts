@@ -7,6 +7,8 @@ export class MineSweeperBoard {
     private readonly _isDetonated$: BehaviorSubject<boolean> = new BehaviorSubject(false);
     readonly isDetonated$: Observable<boolean> = this._isDetonated$.pipe(distinctUntilChanged());
     private _isCompleted = false;
+    private readonly _isCompleted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    readonly isCompleted$: Observable<boolean> = this._isCompleted$.asObservable().pipe(distinctUntilChanged());
 
     constructor(boardSettings: BoardSettings) {
         this.cellGrid = this.createCellGrid(boardSettings);
@@ -25,6 +27,11 @@ export class MineSweeperBoard {
 
     get isCompleted(): boolean {
         return this._isCompleted;
+    }
+
+    private set isCompleted(isCompleted: boolean) {
+        this._isCompleted = isCompleted;
+        this._isCompleted$.next(isCompleted);
     }
 
     private createCellGrid(boardSettings: BoardSettings): CellGrid {
@@ -82,7 +89,7 @@ export class MineSweeperBoard {
     }
 
     private updateIsCompleted(): void {
-        this._isCompleted = this.cellGrid.flat().filter(cell => !cell.isBomb).every(cell => cell.isOpen);
+        this.isCompleted = this.cellGrid.flat().filter(cell => !cell.isBomb).every(cell => cell.isOpen);
     }
 
     private openAllBombs(): void {
